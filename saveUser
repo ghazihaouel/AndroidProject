@@ -1,0 +1,30 @@
+private void getPlats() {
+    Request request = new Request.Builder()
+            .url(UsersApp.baseUrl + "plats")
+            .headers(buildStandardHeaders(Stormpath.accessToken()))
+            .get()
+            .build();
+ 
+    okHttpClient.newCall(request).enqueue(new Callback() {
+        @Override public
+        void onFailure(Call call, IOException e) {
+        }
+ 
+        @Override public void onResponse(Call call, Response response)
+                throws IOException {
+            JSONObject mPlats;
+ 
+            try {
+                mNotes = new JSONObject(response.body().string());
+                String plats = mNotes.getString("plats");
+ 
+                // You can also include some extra data.
+                Intent intent = new Intent(ACTION_GET_PLATS);
+                intent.putExtra("plat", noteCloud);
+ 
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            } catch (JSONException e) {
+            }
+        }
+    });
+}

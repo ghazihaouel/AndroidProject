@@ -1,0 +1,32 @@
+Stormpath.getUserProfile(new StormpathCallback<UserProfile>() {
+    @Override
+    public void onSuccess(UserProfile userProfile) {
+        getNotes();
+    }
+ 
+    @Override
+    public void onFailure(StormpathError error) {
+        // Show login view
+        startActivity(new Intent(context, StormpathLoginActivity.class));
+    }
+});```
+ 
+**NOTE**: Stormpath access tokens are automatically created for users who sign into your application, and are stored securely on your Android device using [SharedPreferences](http://developer.android.com/reference/android/content/SharedPreferences.html).
+ 
+For our custom endpoints `/notes`, we are using the [OkHttp3](https://square.github.io/okhttp/3.x/okhttp/okhttp3/package-summary.html) library.
+ 
+So let's initialize the OkHttp3 objects in the `NotesActivity.java`'s `onCreate()` method.
+ 
+```java
+// Initialize OkHttp library.
+HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+    @Override
+    public void log(String message) {
+        Stormpath.logger().d(message);
+    }
+});
+ 
+httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+this.okHttpClient = new OkHttpClient.Builder()
+        .addNetworkInterceptor(httpLoggingInterceptor)
+        .build();

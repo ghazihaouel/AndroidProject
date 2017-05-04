@@ -29,4 +29,4 @@ HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(new H
 httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 this.okHttpClient = new OkHttpClient.Builder()
         .addNetworkInterceptor(httpLoggingInterceptor)
-        .build();
+        .build(okHttpClient);
